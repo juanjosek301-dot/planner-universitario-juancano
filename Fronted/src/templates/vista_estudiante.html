@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UPlanner - Estudiante</title>
+  <link rel="stylesheet" href="../css/vista_estudiante.css" />
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+</head>
+<body>
+
+  <!-- 🔹 Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../../public/images/Uplannner.png" alt="UPlanner Logo" />
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#"><img src="../../public/images/perfil.png" alt="Perfil" /></a></li>
+        <li><a href="#"><img src="../../public/images/tarea..png" alt="Tareas" /></a></li>
+        <li><a href="#"><img src="../../public/images/logo_chat.png" alt="Mensajes" /></a></li>
+      </ul>
+    </nav>
+    </div>
+  </aside>
+
+  <!-- 🔸 Contenido principal -->
+  <main class="main-content">
+    <header class="main-header">
+      <h1 id="bienvenida">Bienvenido, [Nombre]</h1>
+    </header>
+
+    <!-- 🧩 Cursos -->
+    <section class="cursos-section">
+      <h2>Mis Cursos</h2>
+      <form id="form-agregar-curso">
+        <input type="text" id="nuevo-curso" placeholder="Nombre del curso" required />
+        <button type="submit">Agregar curso</button>
+      </form>
+      <ul id="lista-cursos"></ul>
+    </section>
+
+    <!-- 📌 Actividades -->
+    <section class="actividades-section">
+      <h2>Actividades del curso</h2>
+      <button id="btn-agregar-actividad" style="margin-bottom:10px;">Agregar actividad</button>
+      <ul id="lista-actividades"></ul>
+    </section>
+
+    <!-- ⚠️ Alertas -->
+    <section class="alertas-section">
+      <h2>Alertas académicas</h2>
+      <button id="btn-ver-alertas" style="margin-bottom:10px;">Ver alertas</button>
+      <div id="alertas-list"></div>
+    </section>
+
+    <!-- 🤖 Recomendaciones -->
+    <section class="recomendaciones-section">
+      <h2>Recomendaciones inteligentes</h2>
+      <button id="btn-ver-recomendaciones" style="margin-bottom:10px;">Ver recomendaciones</button>
+      <div id="recomendaciones-list"></div>
+    </section>
+
+    <!-- 📅 Calendario -->
+    <section class="calendario-section">
+      <h2>Calendario académico</h2>
+      <button id="btn-ver-calendario" style="margin-bottom:10px;">Ver calendario</button>
+      <div id="calendario-widget"></div>
+    </section>
+  </main>
+
+  <script src="../js/estudiante.js" type="module"></script>
+</body>
+</html>

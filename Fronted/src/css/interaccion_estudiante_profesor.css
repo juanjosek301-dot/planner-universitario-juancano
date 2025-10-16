@@ -1,0 +1,180 @@
+:root {
+  --rojo-institucional: #b30000;
+  --rojo-claro: #e74c3c;
+  --gris-claro: #f5f5f5;
+  --gris-medio: #cccccc;
+  --texto-principal: #333;
+  --fondo-principal: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--fondo-principal);
+  color: var(--texto-principal);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.chat-layout {
+  display: grid;
+  grid-template-columns: 240px 280px 1fr;
+  width: 95%;
+  max-width: 1300px;
+  height: 90vh;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* 🔹 Panel rojo institucional */
+.chat-sidebar {
+  background-color: var(--rojo-institucional);
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-sidebar .usuario-info {
+  text-align: center;
+}
+
+.chat-sidebar .usuario-info p {
+  margin: 6px 0;
+  font-weight: bold;
+}
+
+.chat-sidebar .logo-universidad {
+  margin-top: 20px;
+  width: 80px;
+  height: auto;
+}
+
+/* 🔸 Panel de conversaciones */
+.chat-conversaciones {
+  background-color: var(--gris-claro);
+  padding: 20px;
+  border-right: 1px solid var(--gris-medio);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-conversaciones h2 {
+  margin-top: 0;
+  font-size: 18px;
+  color: var(--rojo-institucional);
+  text-align: center;
+}
+
+#lista-conversaciones {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+#lista-conversaciones li {
+  padding: 10px;
+  margin-bottom: 8px;
+  background-color: white;
+  border: 1px solid var(--gris-medio);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+#lista-conversaciones li:hover {
+  background-color: var(--gris-medio);
+}
+
+.conversacion-activa {
+  background-color: var(--rojo-claro);
+  color: white;
+  font-weight: bold;
+}
+
+/* 🗨️ Panel de chat */
+.chat-mensajes {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: var(--fondo-principal);
+}
+
+.chat-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--rojo-institucional);
+  border-bottom: 1px solid var(--gris-medio);
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.chat-historial {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 20px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mensaje {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.mensaje.docente {
+  background-color: var(--rojo-claro);
+  color: white;
+  align-self: flex-start;
+}
+
+.mensaje.estudiante {
+  background-color: var(--gris-claro);
+  color: var(--texto-principal);
+  align-self: flex-end;
+}
+
+/* ✉️ Formulario de envío */
+.chat-form {
+  display: flex;
+  border-top: 1px solid var(--gris-medio);
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+#input-mensaje {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--gris-medio);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.chat-form button {
+  margin-left: 10px;
+  padding: 10px 16px;
+  background-color: var(--rojo-institucional);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.chat-form button:hover {
+  background-color: var(--rojo-claro);
+}

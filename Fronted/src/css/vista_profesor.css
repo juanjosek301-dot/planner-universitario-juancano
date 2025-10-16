@@ -1,0 +1,231 @@
+:root {
+  --rojo-institucional: #b71c1c;
+  --rojo-claro: #f44336;
+  --blanco: #ffffff;
+  --gris-claro: #fbe9e7;
+  --gris-medio: #cccccc;
+  --fuente-principal: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--fuente-principal);
+  background-color: var(--blanco);
+  display: flex;
+  height: 100vh;
+}
+
+
+/* Sidebar */
+.sidebar {
+  width: 90px;
+  background: linear-gradient(180deg, var(--rojo-institucional), var(--rojo-claro));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0;
+  box-shadow: 2px 0 8px rgba(183, 28, 28, 0.08);
+}
+
+.sidebar .logo img {
+  width: 60px;
+  margin-bottom: 18px;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar nav ul li {
+  margin: 18px 0;
+}
+
+.sidebar nav ul li img {
+  width: 32px;
+  height: 32px;
+  transition: transform 0.2s ease;
+}
+
+.sidebar nav ul li img:hover {
+  transform: scale(1.1);
+}
+
+.sidebar .mascota img {
+  width: 40px;
+  margin: 18px 0 10px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar .mascota img:hover {
+  opacity: 1;
+}
+
+#cerrar-sesion {
+  margin-top: 18px;
+  background: linear-gradient(90deg, var(--rojo-institucional), var(--rojo-claro));
+  color: var(--blanco);
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  width: 80%;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#cerrar-sesion:hover {
+  background: linear-gradient(90deg, var(--rojo-claro), var(--rojo-institucional));
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  background: var(--blanco);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  align-items: center;
+}
+
+.main-header h1 {
+  font-size: 28px;
+  color: var(--rojo-institucional);
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+  outline: none;
+}
+
+/* Secciones */
+section {
+  background: var(--gris-claro);
+  border-radius: 12px;
+  padding: 28px 24px;
+  box-shadow: 0 2px 8px rgba(183, 28, 28, 0.07);
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+section h2 {
+  font-size: 20px;
+  color: #000;
+  margin-bottom: 10px;
+  margin-top: 0;
+  outline: none;
+}
+
+/* Mis Cursos */
+.mis-cursos ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.mis-cursos ul li {
+  background: var(--blanco);
+  border-left: 5px solid var(--rojo-institucional);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+/* Progreso estudiantes */
+.progreso-estudiantes label {
+  font-weight: bold;
+  color: var(--rojo-institucional);
+  margin-bottom: 6px;
+  display: block;
+  text-align: left;
+  width: 100%;
+}
+
+.progreso-estudiantes select {
+  padding: 8px 12px;
+  border: 1.5px solid var(--rojo-claro);
+  border-radius: 8px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.progreso-estudiantes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.progreso-estudiantes ul li {
+  background: var(--blanco);
+  border-left: 5px solid var(--rojo-claro);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+/* Recomendaciones */
+.recomendaciones input[type="text"] {
+  padding: 10px;
+  border: 1.5px solid var(--rojo-claro);
+  border-radius: 8px;
+  font-size: 15px;
+  margin-bottom: 8px;
+  width: 100%;
+  max-width: 400px;
+}
+
+#btn-agregar-recomendacion {
+  background: linear-gradient(90deg, var(--rojo-institucional), var(--rojo-claro));
+  color: var(--blanco);
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  width: 100%;
+  max-width: 400px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#btn-agregar-recomendacion:hover {
+  background: linear-gradient(90deg, var(--rojo-claro), var(--rojo-institucional));
+  transform: translateY(-2px) scale(1.04);
+}
+
+#panel-recomendaciones {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+#panel-recomendaciones li {
+  background: var(--blanco);
+  border-left: 5px solid var(--rojo-institucional);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+

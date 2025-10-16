@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UPlanner - Vista Profesor</title>
+  <link rel="stylesheet" href="../css/vista_profesor.css"/>
+</head>
+<body>
+  <!-- 🔹 Sidebar institucional -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../../public/images/U PLANNER .png" alt="Logo UPlanner" />
+    </div>
+    <nav>
+      <ul>
+        <li><a href="javascript:void(0)"><img src="../../public/images/perfil_profesor.png" alt="Perfil" /></a></li>
+        <li><a href="javascript:void(0)"><img src="../../public/images/cursos.png" alt="Cursos" /></a></li>
+        <li><a href="javascript:void(0)"><img src="../../public/images/mensajes..png" alt="Mensajes"/></a></li>
+      </ul>
+    </nav>
+    <button id="cerrar-sesion">Cerrar sesión</button>
+  </aside>
+
+  <!-- 🔸 Contenido principal -->
+  <main class="main-content">
+    <header class="main-header">
+      <h1 id="bienvenida">Bienvenido, Profesor</h1>
+    </header>
+
+    <!-- 📚 Mis Cursos -->
+    <section class="mis-cursos">
+      <h2>Mis Cursos</h2>
+      <ul id="lista-cursos">
+        <!-- Cursos impartidos por el profesor -->
+      </ul>
+    </section>
+
+    <!-- 👥 Estudiantes del Curso -->
+    <section class="porgreso-estudiantes">
+      <h2>Progreso academico</h2>
+      <label for="selector-curso">Selecciona un curso:</label>
+      <select id="selector-curso">
+        <option value="">-- Selecciona --</option>
+        <!-- Opciones dinámicas -->
+      </select>
+      <ul id="lista-estudiantes">
+        <!-- Lista de estudiantes con rendimiento -->
+      </ul>
+    </section>
+
+    <!-- 🤖 Recomendaciones Académicas -->
+    <section class="recomendaciones">
+      <h2>Recomendaciones Académicas</h2>
+      <input type="text" id="input-recomendacion" placeholder="Escribe una recomendación..." />
+      <button id="btn-agregar-recomendacion">Agregar</button>
+      <ul id="panel-recomendaciones">
+        <!-- Recomendaciones generadas por IA -->
+      </ul>
+    </section>
+  </main>
+
+  <script src="../js/profesor.js" type="module"></script>
+</body>
+</html>

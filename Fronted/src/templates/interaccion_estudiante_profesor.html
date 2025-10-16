@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UPlanner - Chat</title>
+  <link rel="stylesheet" href="../css/interaccion_estudiante_profesor.css" />
+</head>
+<body>3
+  <div class="chat-layout">
+    <!-- 🔹 Sidebar izquierda -->
+    <aside class="chat-sidebar">
+      <div class="usuario-info">
+        <p id="nombre-usuario">Juan Pérez</p>
+        <p id="institucion-usuario">Universidad de Medellín</p>
+      </div>
+      <nav>
+        <ul>
+          <img src="../../public/images/firma_universidad.png" alt="Universidad de Medellín" class="logo-universidad" />
+          <li><a href="#">Asistente Virtual</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- 🔸 Panel de conversaciones -->
+    <section class="chat-conversaciones">
+      <h2>Conversaciones</h2>
+      <ul id="lista-conversaciones">
+        <!-- Conversaciones cargadas dinámicamente -->
+      </ul>
+    </section>
+
+    <!-- 🗨️ Panel de chat activo -->
+    <section class="chat-mensajes">
+      <div class="chat-header">
+        <h2 id="nombre-chat">Docente</h2>
+      </div>
+      <div id="chat-historial" class="chat-historial">
+        <!-- Mensajes renderizados dinámicamente -->
+      </div>
+      <form id="form-chat" class="chat-form">
+        <input type="text" id="input-mensaje" placeholder="Escribe tu mensaje..." autocomplete="off" />
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+  </div>
+
+  <script src="../js/chat.js" type="module"></script>
+</body>
+</html>
+
