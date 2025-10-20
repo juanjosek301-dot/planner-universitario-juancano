@@ -41,9 +41,9 @@ class ControladorUsuarios:
         cursor = conn.cursor()
         try:
             cursor.execute("""
-                INSERT INTO usuarios (nombre, correo, clave)
-                VALUES (%s, %s, %s)
-            """, (usuario.nombre, usuario.correo, usuario.clave))
+                INSERT INTO usuarios (nombre, correo, clave, rol)
+                VALUES (%s, %s, %s, %s)
+            """, (usuario.nombre, usuario.correo, usuario.clave, usuario.rol))
             conn.commit()
         except psycopg2.IntegrityError as e:
             conn.rollback()

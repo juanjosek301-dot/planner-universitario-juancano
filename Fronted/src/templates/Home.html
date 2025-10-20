@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>U Planner - Inicio de sesión</title>
-  <link rel="stylesheet" href="../css/Home.css"/>
+</head>
+<!-- ✅ Ruta del CSS correcta desde Flask -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/Home.css') }}">
 </head>
 <body>
   <main class="login-container">
@@ -12,14 +14,13 @@
 
       <div class="login-header">
         <div class="logo-group">
-          <img src="../../public/images/firma_universidad.png" alt="Universidad de Medellín" class="logo-universidad" />
-          <img src="../../public/images/U PLANNER .png" alt="U Planner" class="logo-planner" />
+          <!-- ✅ Imágenes servidas desde static -->
+          <img src="{{ url_for('static', filename='public/images/firma_universidad.png') }}" alt="Universidad de Medellín" class="logo-universidad" />
+          <img src="{{ url_for('static', filename='public/images/U PLANNER .png') }}" alt="U Planner" class="logo-planner" />
         </div>
       </div>
 
-
       <form id="login-form" class="login-form" autocomplete="off">
-
         <div class="input-group">
           <label for="nombre">Nombre completo</label>
           <input type="text" id="nombre" name="nombre" placeholder="Juan Pérez" required />
@@ -35,13 +36,10 @@
           <input type="password" id="password" name="password" placeholder="••••••••" required />
         </div>
 
-        <div class="input-group">
-          <label for="rol">Rol</label>
-          <select id="rol" name="rol" required>
-            <option value="estudiante">Estudiante</option>
-            <option value="profesor">Profesor</option>
-            </select>
-        </div>
+        <select id="rol" name="rol" required>
+          <option value="estudiante">Estudiante</option>
+          <option value="profesor">Profesor</option>
+        </select>
 
         <button type="submit" class="btn-login">Iniciar sesión</button>
       </form>
@@ -52,8 +50,37 @@
     </section>
   </main>
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/Home.css') }}">
-  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
-  <img src="{{ url_for('static', filename='public/images/firma_universidad.png') }}" />
+  <!-- SCRIPT PARA ENVIAR LOS DATOS AL BACKEND -->
+  <script>
+    document.getElementById("login-form").addEventListener("submit", function(e) {
+      e.preventDefault(); // Evita que se recargue la página
+
+      const datos = {
+        nombre: document.getElementById("nombre").value,
+        correo: document.getElementById("email").value,
+        clave: document.getElementById("password").value,
+        rol: document.getElementById("rol").value
+      };
+
+      fetch("http://127.0.0.1:5001/api/usuario", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          alert("⚠️ " + data.error);
+        } else {
+          alert("✅ Usuario creado con éxito: " + data.nombre);
+          console.log("Respuesta del servidor:", data);
+        }
+      })
+      .catch(err => {
+        console.error("Error:", err);
+        alert("❌ No se pudo conectar con el servidor.");
+      });
+    });
+  </script>
 </body>
 </html>

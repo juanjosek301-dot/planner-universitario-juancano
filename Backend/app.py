@@ -2,12 +2,11 @@ from flask import Flask, render_template
 from routes.usuario_routes import usuario_bp
 import os
 
-# Ruta absoluta a tus carpetas externas
-base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Frontend', 'src'))
-template_path = os.path.join(base_dir, 'templates')
-static_path = base_dir  # Esto incluye css/, js/, public/
-
-app = Flask(__name__, template_folder=template_path, static_folder=static_path)
+app = Flask(
+    __name__,
+    template_folder="../Fronted/src/templates",  # ruta a tus HTML
+    static_folder="../Fronted/src"               # ruta a tus CSS/JS
+)
 
 app.register_blueprint(usuario_bp)
 
