@@ -53,19 +53,15 @@ class ControladorUsuarios:
             conn.close() 
     
     @staticmethod
-    def buscar_por_correo(correo):
+    def buscar_usuario(correo):
         conn = ControladorUsuarios.obtener_conexion()
         cursor = conn.cursor()
-        cursor.execute("""
-            SELECT id, nombre, correo FROM usuarios WHERE correo = %s
-        """, (correo,))
-        fila = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        if fila:
-            return {
-                "id": fila[0],
-                "nombre": fila[1],
-                "correo": fila[2]
-            }
-        return None                    
+        try:
+            cursor.execute("SELECT nombre, correo, clave, rol FROM usuarios WHERE correo = %s", (correo,))
+            row = cursor.fetchone()
+            if row:
+                return Usuario(nombre=row[0], correo=row[1], clave=row[2], rol=row[3])
+            return None
+        finally:
+            cursor.close()
+            conn.close()             

@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>U Planner - Inicio de sesión</title>
-</head>
-<!-- ✅ Ruta del CSS correcta desde Flask -->
+  <link rel="stylesheet" href="../css/Home.css"/>
+
+
+  <!-- ✅ Ruta correcta del CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/Home.css') }}">
 </head>
+
 <body>
   <main class="login-container">
     <section class="login-box">
@@ -20,7 +23,10 @@
         </div>
       </div>
 
-      <form id="login-form" class="login-form" autocomplete="off">
+      <!-- ✅ FORMULARIO DE CREACIÓN DE USUARIO -->
+      <form id="form-crear" class="login-form" autocomplete="off">
+        <h2>Crear usuario</h2>
+
         <div class="input-group">
           <label for="nombre">Nombre completo</label>
           <input type="text" id="nombre" name="nombre" placeholder="Juan Pérez" required />
@@ -36,10 +42,29 @@
           <input type="password" id="password" name="password" placeholder="••••••••" required />
         </div>
 
-        <select id="rol" name="rol" required>
-          <option value="estudiante">Estudiante</option>
-          <option value="profesor">Profesor</option>
-        </select>
+        <div class="input-group">
+          <label for="rol">Rol</label>
+          <select id="rol" name="rol" required>
+            <option value="estudiante">Estudiante</option>
+            <option value="profesor">Profesor</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-login">Crear usuario</button>
+      </form>
+
+      <!-- ✅ FORMULARIO DE INICIO DE SESIÓN -->
+      <form id="form-login" class="login-form" autocomplete="off">
+
+        <div class="input-group">
+          <label for="correo-login">Correo electrónico</label>
+          <input type="email" id="correo-login" name="correo" placeholder="ejemplo@correo.edu.co" required />
+        </div>
+
+        <div class="input-group">
+          <label for="clave-login">Contraseña</label>
+          <input type="password" id="clave-login" name="clave" placeholder="••••••••" required />
+        </div>
 
         <button type="submit" class="btn-login">Iniciar sesión</button>
       </form>
@@ -50,10 +75,10 @@
     </section>
   </main>
 
-  <!-- SCRIPT PARA ENVIAR LOS DATOS AL BACKEND -->
+  <!-- ✅ SCRIPT: Crear usuario -->
   <script>
-    document.getElementById("login-form").addEventListener("submit", function(e) {
-      e.preventDefault(); // Evita que se recargue la página
+    document.getElementById("form-crear").addEventListener("submit", function(e) {
+      e.preventDefault();
 
       const datos = {
         nombre: document.getElementById("nombre").value,
@@ -62,7 +87,7 @@
         rol: document.getElementById("rol").value
       };
 
-      fetch("http://127.0.0.1:5001/api/usuario", {
+      fetch("/api/usuario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos)
@@ -73,7 +98,6 @@
           alert("⚠️ " + data.error);
         } else {
           alert("✅ Usuario creado con éxito: " + data.nombre);
-          console.log("Respuesta del servidor:", data);
         }
       })
       .catch(err => {
@@ -82,5 +106,52 @@
       });
     });
   </script>
+
+  <script>
+
+    document.getElementById("form-login").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+    const correo = document.getElementById("correo-login").value;
+    const clave = document.getElementById("clave-login").value;
+
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo, clave })
+      });
+
+      const data = await res.json();
+      console.log("📥 Respuesta login:", data);
+
+      if (res.ok) {
+        // 🔹 Guarda datos en localStorage
+        localStorage.setItem("id_profesor", data.id);
+        localStorage.setItem("rol", data.rol);
+
+        alert(`Bienvenido ${data.nombre}`);
+
+          // ✅ Guardar el ID del usuario en localStorage sin tocar el backend
+        localStorage.setItem("id_profesor", data.id);
+
+        localStorage.setItem("rol", data.rol);
+
+        // ✅ Redirección normal (como ya la tenías)
+        if (data.rol === "estudiante") {
+          window.location.href = "http://127.0.0.1:5000/estudiante";
+        } else if (data.rol === "profesor") {
+          window.location.href = "http://127.0.0.1:5000/profesor";
+        }
+      } else {
+        alert(data.error || "Error al iniciar sesión");
+      }
+    } catch (error) {
+      console.error("🚨 Error en login:", error);
+      alert("Error de conexión con el servidor");
+    }
+  });
+</script>
+
 </body>
 </html>

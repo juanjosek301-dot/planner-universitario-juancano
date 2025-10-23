@@ -5,18 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UPlanner - Vista Profesor</title>
   <link rel="stylesheet" href="../css/vista_profesor.css"/>
+  
+
+  <!-- ✅ Carga de CSS correcta -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/vista_profesor.css') }}" />
 </head>
 <body>
+
   <!-- 🔹 Sidebar institucional -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="../../public/images/U PLANNER .png" alt="Logo UPlanner" />
+      <img src="{{ url_for('static', filename='public/images/U PLANNER .png') }}" alt="Logo UPlanner" />
     </div>
     <nav>
       <ul>
-        <li><a href="javascript:void(0)"><img src="../../public/images/perfil_profesor.png" alt="Perfil" /></a></li>
-        <li><a href="javascript:void(0)"><img src="../../public/images/cursos.png" alt="Cursos" /></a></li>
-        <li><a href="javascript:void(0)"><img src="../../public/images/mensajes..png" alt="Mensajes"/></a></li>
+        <li><a href="#"><img src="{{ url_for('static', filename='public/images/perfil_profesor.png') }}" alt="Perfil" /></a></li>
+        <li><a href="#"><img src="{{ url_for('static', filename='public/images/cursos.png') }}" alt="Cursos" /></a></li>
+        <li><a href="#"><img src="{{ url_for('static', filename='public/images/mensajes..png') }}" alt="Mensajes" /></a></li>
       </ul>
     </nav>
     <button id="cerrar-sesion">Cerrar sesión</button>
@@ -28,38 +33,62 @@
       <h1 id="bienvenida">Bienvenido, Profesor</h1>
     </header>
 
-    <!-- 📚 Mis Cursos -->
+    <!-- 📚 Crear Curso -->
+    <section class="crear-curso">
+      <h2>📘 Crear Nuevo Curso</h2>
+      <form id="form-curso">
+        <input type="text" id="nombre" placeholder="Nombre del curso" required />
+        <input type="text" id="codigo" placeholder="Código del curso" required />
+        <textarea id="descripcion" placeholder="Descripción del curso..."></textarea>
+        <button type="submit" id="btn-crear-curso">Crear curso</button>
+      </form>
+    </section>
+
+    <!-- 📘 Mis Cursos -->
     <section class="mis-cursos">
       <h2>Mis Cursos</h2>
-      <ul id="lista-cursos">
-        <!-- Cursos impartidos por el profesor -->
-      </ul>
+      <ul id="lista-cursos"></ul>
     </section>
 
-    <!-- 👥 Estudiantes del Curso -->
-    <section class="porgreso-estudiantes">
-      <h2>Progreso academico</h2>
-      <label for="selector-curso">Selecciona un curso:</label>
-      <select id="selector-curso">
-        <option value="">-- Selecciona --</option>
-        <!-- Opciones dinámicas -->
-      </select>
-      <ul id="lista-estudiantes">
-        <!-- Lista de estudiantes con rendimiento -->
-      </ul>
-    </section>
-
-    <!-- 🤖 Recomendaciones Académicas -->
-    <section class="recomendaciones">
-      <h2>Recomendaciones Académicas</h2>
-      <input type="text" id="input-recomendacion" placeholder="Escribe una recomendación..." />
-      <button id="btn-agregar-recomendacion">Agregar</button>
-      <ul id="panel-recomendaciones">
-        <!-- Recomendaciones generadas por IA -->
-      </ul>
-    </section>
   </main>
 
-  <script src="../js/profesor.js" type="module"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("form-curso");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const curso = {
+          nombre: document.getElementById("nombre").value,
+          codigo: document.getElementById("codigo").value,
+          descripcion: document.getElementById("descripcion").value,
+          id_profesor: 1  
+        };
+
+        try {
+          const res = await fetch("/api/cursos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(curso)
+        });
+
+        const data = await res.json();
+        console.log("📥 Respuesta del servidor:", data);
+
+        if (res.ok) {
+          alert("✅ Curso creado correctamente");
+          form.reset();
+        } else {
+          alert("❌ Error: " + data.error);
+        }
+    } catch (error) {
+      console.error("🚨 Error al enviar:", error);
+      alert("Error al conectar con el servidor");
+    }
+  });
+});
+</script>
+
 </body>
 </html>

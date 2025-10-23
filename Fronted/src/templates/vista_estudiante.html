@@ -4,25 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UPlanner - Estudiante</title>
-  <link rel="stylesheet" href="../css/vista_estudiante.css" />
+  <link rel="stylesheet" href="../css/vista_estudiante.css"/>
+
+  <!-- ✅ Cargar CSS correctamente desde Flask -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/vista_estudiante.css') }}" />
+
+  <!-- ✅ FullCalendar desde CDN -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 </head>
-<body>
 
+<body>
   <!-- 🔹 Sidebar -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="../../public/images/Uplannner.png" alt="UPlanner Logo" />
+      <!-- ✅ Imagen servida desde carpeta static -->
+      <img src="{{ url_for('static', filename='public/images/Uplannner.png') }}" alt="UPlanner Logo" />
     </div>
     <nav>
       <ul>
-        <li><a href="#"><img src="../../public/images/perfil.png" alt="Perfil" /></a></li>
-        <li><a href="#"><img src="../../public/images/tarea..png" alt="Tareas" /></a></li>
-        <li><a href="#"><img src="../../public/images/logo_chat.png" alt="Mensajes" /></a></li>
+        <img src="{{ url_for('public_files', filename='images/Uplannner.png') }}" alt="UPlanner Logo" />
+        <img src="{{ url_for('public_files', filename='images/perfil.png') }}" alt="Perfil" />
+        <img src="{{ url_for('public_files', filename='images/tarea..png') }}" alt="Tareas" />
+        <img src="{{ url_for('public_files', filename='images/logo_chat.png') }}" alt="Mensajes" />
       </ul>
     </nav>
-    </div>
   </aside>
 
   <!-- 🔸 Contenido principal -->
@@ -32,13 +38,11 @@
     </header>
 
     <!-- 🧩 Cursos -->
-    <section class="cursos-section">
-      <h2>Mis Cursos</h2>
-      <form id="form-agregar-curso">
-        <input type="text" id="nuevo-curso" placeholder="Nombre del curso" required />
-        <button type="submit">Agregar curso</button>
-      </form>
-      <ul id="lista-cursos"></ul>
+    <!-- 📘 Inscripción a cursos -->
+    <section class="inscripcion-section">
+      <h2>📘 Inscribirse en un curso</h2>
+      <p>Selecciona un curso disponible y haz clic en “Inscribirse”.</p>
+      <ul id="lista-cursos-disponibles"></ul>
     </section>
 
     <!-- 📌 Actividades -->
@@ -69,7 +73,97 @@
       <div id="calendario-widget"></div>
     </section>
   </main>
+  <!-- ✅ Script JS -->
+  <script>
+    // 🧠 ID del estudiante (temporal)
+    const idEstudiante = 3;
 
-  <script src="../js/estudiante.js" type="module"></script>
+    // 🔹 Cargar cursos disponibles
+    async function cargarCursosDisponibles() {
+      try {
+        const res = await fetch('/api/cursos/');
+        const data = await res.json();
+
+        const lista = document.getElementById('lista-cursos-disponibles');
+        lista.innerHTML = '';
+
+        if (!data.length) {
+          lista.innerHTML = '<li>No hay cursos disponibles por ahora.</li>';
+          return;
+        }
+
+        data.forEach(curso => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <strong>${curso.nombre}</strong> (${curso.codigo})<br>
+            <em>${curso.descripcion || 'Sin descripción'}</em><br>
+            <button class="btn-inscribirse" data-id="${curso.id}">Inscribirse</button>
+          `;
+          lista.appendChild(li);
+        });
+
+        // Botones de inscripción
+        document.querySelectorAll('.btn-inscribirse').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const idCurso = btn.dataset.id;
+            await inscribirseEnCurso(idCurso);
+          });
+        });
+      } catch (err) {
+        console.error('Error al cargar cursos:', err);
+      }
+    }
+
+    // 🔸 Función para inscribirse
+    async function inscribirseEnCurso(idCurso) {
+      try {
+        const res = await fetch('/api/inscripciones/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id_curso: idCurso, id_estudiante: idEstudiante })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert('✅ Te has inscrito correctamente');
+          cargarMisCursos();
+        } else {
+          alert('❌ ' + (data.error || 'Error al inscribirse'));
+        }
+      } catch (err) {
+        console.error('Error al inscribirse:', err);
+      }
+    }
+
+    // 🔹 Cargar mis cursos
+    async function cargarMisCursos() {
+      try {
+        const res = await fetch(`/api/inscripciones/estudiante/${idEstudiante}`);
+        const data = await res.json();
+
+        const lista = document.getElementById('lista-mis-cursos');
+        lista.innerHTML = '';
+
+        if (!data.length) {
+          lista.innerHTML = '<li>No estás inscrito en ningún curso.</li>';
+          return;
+        }
+
+        data.forEach(curso => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${curso.nombre}</strong> (${curso.codigo})<br>${curso.descripcion || ''}`;
+          lista.appendChild(li);
+        });
+      } catch (err) {
+        console.error('Error al cargar mis cursos:', err);
+      }
+    }
+
+    // 🔸 Inicialización
+    cargarCursosDisponibles();
+    cargarMisCursos();
+  </script>
+
 </body>
 </html>

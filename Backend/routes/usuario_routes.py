@@ -31,4 +31,25 @@ def crear_usuario():
         print("Error al crear usuario:", e)
         return jsonify({'error': str(e)}), 500
     
+@usuario_bp.route('/login', methods=['POST'])
+def login_usuario():
+    data = request.get_json()
+    correo = data.get('correo')
+    clave = data.get('clave')
+
+    if not correo or not clave:
+        return jsonify({'error': 'Faltan datos'}), 400
+
+    usuario = ControladorUsuarios.buscar_usuario(correo)
+
+    if usuario and usuario.clave == clave:
+        # ✅ Inicio de sesión exitoso
+        return jsonify({
+            'mensaje': 'Inicio de sesión exitoso',
+            'rol': usuario.rol,
+            'nombre': usuario.nombre
+        }), 200
+    else:
+        return jsonify({'error': 'Correo o clave incorrectos'}), 401
+    
   
