@@ -1,35 +1,208 @@
-/* Crear Curso */
-.crear-curso form {
+:root {
+  --rojo: #d32f2f;
+  --rojo-oscuro: #b71c1c;
+  --blanco: #ffffff;
+  --gris-claro: #f4f6f8;
+  --gris-medio: #e0e0e0;
+  --texto: #2c2c2c;
+  --sombra: rgba(0, 0, 0, 0.06);
+  --borde: #dddddd;
+  --transicion: 0.25s ease;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--gris-claro);
+  color: var(--texto);
+  margin: 0;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  width: 90px;
+  background-color: var(--rojo);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  max-width: 500px;
+  align-items: center;
+  padding: 20px 0;
+  gap: 24px;
+  box-shadow: 3px 0 10px var(--sombra);
 }
 
-.crear-curso input,
-.crear-curso textarea {
-  padding: 10px 12px;
-  border: 1.5px solid var(--rojo-claro);
+.sidebar img {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  transition: transform var(--transicion);
+}
+
+.sidebar img:hover {
+  transform: scale(1.1);
+}
+
+.sidebar button {
+  margin-top: auto;
+  background-color: var(--blanco);
+  color: var(--rojo);
+  border: 1px solid var(--rojo);
+  padding: 10px 16px;
   border-radius: 8px;
-  font-size: 15px;
-  width: 100%;
-  resize: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transicion);
 }
 
-#btn-crear-curso {
-  background: linear-gradient(90deg, var(--rojo-institucional), var(--rojo-claro));
+.sidebar button:hover {
+  background-color: var(--rojo-oscuro);
+  color: var(--blanco);
+}
+
+/* === MAIN CONTENT === */
+.main-content {
+  flex: 1;
+  padding: 40px 5vw;
+  overflow-y: auto;
+}
+
+.main-header h1 {
+  color: var(--rojo);
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+}
+
+/* === FORMULARIO CREAR CURSO === */
+.crear-curso {
+  background-color: var(--blanco);
+  padding: 32px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px var(--sombra);
+  max-width: 700px;
+  margin-bottom: 40px;
+}
+
+.crear-curso h2 {
+  color: var(--rojo);
+  margin-bottom: 24px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.form-curso {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-group input,
+.form-group textarea {
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  background-color: var(--gris-claro);
+  transition: var(--transicion);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--rojo);
+  box-shadow: 0 0 6px rgba(211, 47, 47, 0.25);
+  background-color: var(--blanco);
+  outline: none;
+}
+
+.btn-crear {
+  background-color: var(--rojo);
   color: var(--blanco);
   border: none;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
-  transition: background 0.2s, transform 0.1s;
+  transition: var(--transicion);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-#btn-crear-curso:hover {
-  background: linear-gradient(90deg, var(--rojo-claro), var(--rojo-institucional));
-  transform: translateY(-2px) scale(1.04);
+.btn-crear:hover {
+  background-color: var(--rojo-oscuro);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* === LISTA DE CURSOS === */
+.mis-cursos {
+  background-color: var(--blanco);
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px var(--sombra);
+  max-width: 700px;
+}
+
+.mis-cursos h2 {
+  color: var(--rojo);
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+}
+
+.curso-item {
+  background-color: #fff5f5;
+  border-left: 4px solid var(--rojo);
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  transition: var(--transicion);
+}
+
+.curso-item:hover {
+  background-color: #ffeaea;
+  transform: scale(1.01);
+}
+
+/* === RESPONSIVO === */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 20px;
+  }
+
+  .crear-curso,
+  .mis-cursos {
+    max-width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 0.95rem;
+  }
+
+  .btn-crear {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .sidebar {
+    width: 70px;
+    gap: 16px;
+  }
+
+  .sidebar img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .main-header h1 {
+    font-size: 1.6rem;
+  }
 }

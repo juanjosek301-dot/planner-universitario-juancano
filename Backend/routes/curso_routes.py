@@ -7,34 +7,38 @@ curso_bp = Blueprint('curso_bp', __name__, url_prefix='/api')
 # ✅ Crear un curso
 @curso_bp.route('/cursos', methods=['POST'])
 def crear_curso():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No se recibieron datos"}), 400
+
     try:
-        data = request.get_json()
-        print("📥 Datos recibidos:", data)  # 👈 Agrega esta línea
-        
-        nombre = data.get('nombre')
-        codigo = data.get('codigo')
-        descripcion = data.get('descripcion')
-        id_profesor = data.get('id_profesor')
-
-        if not nombre or not codigo or not id_profesor:
-            return jsonify({'error': 'Faltan datos obligatorios'}), 400
-
-        curso = Curso(nombre, codigo, descripcion, id_profesor)
-        ControladorCursos.insertar_curso(curso)
-
-        return jsonify({'mensaje': '✅ Curso creado exitosamente'}), 201
-
+        curso = Curso(
+            nombre=data.get("nombre"),
+            codigo=data.get("codigo"),
+            descripcion=data.get("descripcion"),
+            id_profesor=data.get("id_profesor")
+        )
+        nuevo_id = ControladorCursos.insertar_curso(curso)
+        return jsonify({"mensaje": "Curso creado correctamente", "id": nuevo_id}), 201
     except Exception as e:
-        print("Error al crear curso:", e)
-        return jsonify({'error': str(e)}), 500
+        print("❌ Error al crear curso:", e)
+        return jsonify({"error": str(e)}), 500
+
 
 
 # ✅ Obtener todos los cursos de un profesor
-@curso_bp.route('/cursos/<int:id_profesor>', methods=['GET'])
-def obtener_cursos(id_profesor):
+@curso_bp.route("/cursos/<int:id_profesor>", methods=["GET"])
+def listar_cursos_por_profesor(id_profesor):
     try:
-        cursos = ControladorCursos.obtener_cursos_por_profesor(id_profesor)
-        return jsonify(cursos), 200
+        cursos = ControladorCursos.listar_cursos_por_profesor(id_profesor)
+        cursos_json = [
+            {
+                "id": c[0],
+                "nombre": c[1],
+                "codigo": c[2],
+                "descripcion": c[3]
+            } for c in cursos
+        ]
+        return jsonify(cursos_json), 200
     except Exception as e:
-        print("Error al obtener cursos:", e)
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500

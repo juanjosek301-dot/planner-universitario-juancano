@@ -57,10 +57,10 @@ class ControladorUsuarios:
         conn = ControladorUsuarios.obtener_conexion()
         cursor = conn.cursor()
         try:
-            cursor.execute("SELECT nombre, correo, clave, rol FROM usuarios WHERE correo = %s", (correo,))
+            cursor.execute("SELECT id, nombre, correo, clave, rol FROM usuarios WHERE correo = %s", (correo,))
             row = cursor.fetchone()
             if row:
-                return Usuario(nombre=row[0], correo=row[1], clave=row[2], rol=row[3])
+                return Usuario(id= row[0], nombre=row[1], correo=row[2], clave=row[3], rol=row[4])
             return None
         finally:
             cursor.close()

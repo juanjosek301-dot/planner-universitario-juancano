@@ -107,8 +107,9 @@
     });
   </script>
 
-  <script>
+  <!-- ✅ SCRIPT: login usuario -->
 
+  <script>
     document.getElementById("form-login").addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -127,15 +128,11 @@
 
       if (res.ok) {
         // 🔹 Guarda datos en localStorage
-        localStorage.setItem("id_profesor", data.id);
+        localStorage.setItem("id_profesor", data.id_usuario);
         localStorage.setItem("rol", data.rol);
+        localStorage.setItem("nombre", data.nombre);
 
         alert(`Bienvenido ${data.nombre}`);
-
-          // ✅ Guardar el ID del usuario en localStorage sin tocar el backend
-        localStorage.setItem("id_profesor", data.id);
-
-        localStorage.setItem("rol", data.rol);
 
         // ✅ Redirección normal (como ya la tenías)
         if (data.rol === "estudiante") {

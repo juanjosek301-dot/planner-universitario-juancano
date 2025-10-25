@@ -47,7 +47,8 @@ def login_usuario():
         return jsonify({
             'mensaje': 'Inicio de sesión exitoso',
             'rol': usuario.rol,
-            'nombre': usuario.nombre
+            'nombre': usuario.nombre,
+            "id_usuario": usuario.id
         }), 200
     else:
         return jsonify({'error': 'Correo o clave incorrectos'}), 401

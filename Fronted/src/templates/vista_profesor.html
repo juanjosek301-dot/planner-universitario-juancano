@@ -4,18 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UPlanner - Vista Profesor</title>
-  <link rel="stylesheet" href="../css/vista_profesor.css"/>
-  
 
-  <!-- ✅ Carga de CSS correcta -->
+  <!-- ✅ CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/vista_profesor.css') }}" />
 </head>
 <body>
 
-  <!-- 🔹 Sidebar institucional -->
+  <!-- 🔹 Sidebar -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="{{ url_for('static', filename='public/images/U PLANNER .png') }}" alt="Logo UPlanner" />
+      <img src="{{ url_for('static', filename='public/images/Uplannner.png') }}" alt="Logo UPlanner" />
     </div>
     <nav>
       <ul>
@@ -36,11 +34,23 @@
     <!-- 📚 Crear Curso -->
     <section class="crear-curso">
       <h2>📘 Crear Nuevo Curso</h2>
-      <form id="form-curso">
-        <input type="text" id="nombre" placeholder="Nombre del curso" required />
-        <input type="text" id="codigo" placeholder="Código del curso" required />
-        <textarea id="descripcion" placeholder="Descripción del curso..."></textarea>
-        <button type="submit" id="btn-crear-curso">Crear curso</button>
+      <form id="form-curso" class="form-curso">
+        <div class="form-group">
+          <label for="nombre">Nombre del curso</label>
+          <input type="text" id="nombre" placeholder="Ejemplo: Física II" required />
+        </div>
+
+        <div class="form-group">
+          <label for="codigo">Código del curso</label>
+          <input type="text" id="codigo" placeholder="Ejemplo: FIS-2025" required />
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" placeholder="Describe brevemente el curso..." rows="3"></textarea>
+        </div>
+
+        <button type="submit" id="btn-crear-curso" class="btn-crear">+ Crear curso</button>
       </form>
     </section>
 
@@ -49,25 +59,36 @@
       <h2>Mis Cursos</h2>
       <ul id="lista-cursos"></ul>
     </section>
+  </main>
 
   </main>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("form-curso");
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("form-curso");
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-        const curso = {
-          nombre: document.getElementById("nombre").value,
-          codigo: document.getElementById("codigo").value,
-          descripcion: document.getElementById("descripcion").value,
-          id_profesor: 1  
-        };
+      // 🧠 Recuperar el id del profesor del localStorage
+      const id_profesor = parseInt(localStorage.getItem("id_profesor"));
+      console.log("🧠 ID del profesor:", id_profesor);
 
-        try {
-          const res = await fetch("/api/cursos", {
+      if (!id_profesor) {
+        alert("❌ Error: No se encontró el ID del profesor. Inicia sesión nuevamente.");
+        window.location.href = "/"; 
+        return;
+      }
+
+      const curso = {
+        nombre: document.getElementById("nombre").value,
+        codigo: document.getElementById("codigo").value,
+        descripcion: document.getElementById("descripcion").value,
+        id_profesor: parseInt(id_profesor)
+      };
+
+      try {
+        const res = await fetch("/api/cursos", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(curso)
@@ -82,12 +103,12 @@
         } else {
           alert("❌ Error: " + data.error);
         }
-    } catch (error) {
-      console.error("🚨 Error al enviar:", error);
-      alert("Error al conectar con el servidor");
-    }
+      } catch (error) {
+        console.error("🚨 Error al enviar:", error);
+        alert("Error al conectar con el servidor");
+      }
+    });
   });
-});
 </script>
 
 </body>

@@ -1,7 +1,6 @@
 class Curso:
-    def __init__(self, id=None, nombre=None, descripcion=None, codigo=None, id_profesor=None):
-        self.id = id
+    def __init__(self, nombre, codigo, descripcion, id_profesor):
         self.nombre = nombre
-        self.descripcion = descripcion
         self.codigo = codigo
+        self.descripcion = descripcion
         self.id_profesor = id_profesor

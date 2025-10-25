@@ -16,23 +16,23 @@ class ControladorCursos:
         return connection
     
     @staticmethod
-    def insertar_curso(curso):
+    def insertar_curso(curso: Curso):
         conn = ControladorCursos.obtener_cursor()
         cursor = conn.cursor()
         try:
             sql = """
-            INSERT INTO cursos (nombre, descripcion, id_profesor)
-            VALUES (%s, %s, %s)
-            RETURNING codigo
+                INSERT INTO cursos (nombre, codigo, descripcion, id_profesor)
+                VALUES (%s, %s, %s, %s)
+                RETURNING id;
             """
-            cursor.execute(sql, (curso.nombre, curso.descripcion, curso.id_profesor))
-            nuevo_id = cursor.fetchone()[0]  # Obtiene el código autogenerado
+            cursor.execute(sql, (curso.nombre, curso.codigo, curso.descripcion, curso.id_profesor))
+            nuevo_id = cursor.fetchone()[0]
             conn.commit()
             return nuevo_id
         finally:
             cursor.close()
             conn.close()
-    
+
     @staticmethod
     def listar_cursos_por_profesor(id_profesor):
         conn = ControladorCursos.obtener_cursor()
