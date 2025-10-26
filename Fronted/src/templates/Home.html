@@ -128,9 +128,15 @@
 
       if (res.ok) {
         // 🔹 Guarda datos en localStorage
-        localStorage.setItem("id_profesor", data.id_usuario);
+        localStorage.setItem("id_usuario", data.id_usuario);
         localStorage.setItem("rol", data.rol);
         localStorage.setItem("nombre", data.nombre);
+
+        if (data.rol === "profesor") {
+          localStorage.setItem("id_profesor", data.id_usuario);
+        } else if (data.rol === "estudiante") {
+          localStorage.setItem("id_estudiante", data.id_usuario);
+        }
 
         alert(`Bienvenido ${data.nombre}`);
 

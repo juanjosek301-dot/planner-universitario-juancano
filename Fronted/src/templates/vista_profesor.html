@@ -9,21 +9,50 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/vista_profesor.css') }}" />
 </head>
 <body>
-
   <!-- 🔹 Sidebar -->
-  <aside class="sidebar">
-    <div class="logo">
-      <img src="{{ url_for('static', filename='public/images/Uplannner.png') }}" alt="Logo UPlanner" />
-    </div>
-    <nav>
-      <ul>
-        <li><a href="#"><img src="{{ url_for('static', filename='public/images/perfil_profesor.png') }}" alt="Perfil" /></a></li>
-        <li><a href="#"><img src="{{ url_for('static', filename='public/images/cursos.png') }}" alt="Cursos" /></a></li>
-        <li><a href="#"><img src="{{ url_for('static', filename='public/images/mensajes..png') }}" alt="Mensajes" /></a></li>
-      </ul>
-    </nav>
-    <button id="cerrar-sesion">Cerrar sesión</button>
-  </aside>
+<aside class="sidebar">
+  <div class="logo">
+    <img src="{{ url_for('static', filename='public/images/Uplannner.png') }}" alt="Logo UPlanner" />
+  </div>
+
+  <nav>
+    <ul>
+      <!-- 👤 Perfil -->
+      <li>
+        <a href="#" id="btn-perfil" title="Perfil">
+          <img src="{{ url_for('static', filename='public/images/perfil_profesor.png') }}" alt="Perfil" />
+        </a>
+      </li>
+
+      <!-- 📚 Cursos -->
+      <li>
+        <a href="#" id="btn-ver-cursos" title="Mis Cursos">
+          <img src="{{ url_for('static', filename='public/images/cursos.png') }}" alt="Cursos" />
+        </a>
+      </li>
+
+      <!-- 💬 Mensajes -->
+      <li>
+        <a href="#" id="btn-mensajes" title="Mensajes">
+          <img src="{{ url_for('static', filename='public/images/mensajes..png') }}" alt="Mensajes" />
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <button id="cerrar-sesion">Cerrar sesión</button>
+</aside>
+
+  <section id="perfil" style="display:none;">
+    <h2>👤 Mi Perfil</h2>
+    <p><strong>Nombre:</strong> <span id="perfil-nombre"></span></p>
+    <p><strong>Correo:</strong> <span id="perfil-correo"></span></p>
+    <p><strong>Rol:</strong> <span id="perfil-rol"></span></p>
+  </section>
+
+  <li><a href="#" id="btn-perfil">
+    <img src="{{ url_for('static', filename='public/images/perfil.png') }}" alt="Perfil" />
+  </a></li>
 
   <!-- 🔸 Contenido principal -->
   <main class="main-content">
@@ -111,5 +140,81 @@
   });
 </script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const listaCursos = document.getElementById("lista-cursos");
+    const btnVerCursos = document.getElementById("btn-ver-cursos");
+
+    btnVerCursos.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const id_profesor = parseInt(localStorage.getItem("id_profesor"));
+      if (!id_profesor) {
+        alert("⚠️ No se encontró el ID del profesor. Inicia sesión nuevamente.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/cursos/${id_profesor}`);
+        const data = await res.json();
+
+        listaCursos.innerHTML = ""; // limpia la lista anterior
+
+        if (data.length === 0) {
+          listaCursos.innerHTML = "<li>No tienes cursos creados aún.</li>";
+        } else {
+          data.forEach(curso => {
+            const li = document.createElement("li");
+            li.textContent = `${curso.nombre} (${curso.codigo}) - ${curso.descripcion}`;
+            listaCursos.appendChild(li);
+          });
+        }
+
+      } catch (error) {
+        console.error("🚨 Error al cargar cursos:", error);
+        alert("Error al cargar los cursos del profesor");
+      }
+    });
+  });
+</script>
+
+<!-- mejorar diseno de perfil -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btnPerfil = document.getElementById("btn-perfil");
+    const perfilSection = document.getElementById("perfil");
+
+    btnPerfil.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const id_profesor = parseInt(localStorage.getItem("id_profesor"));
+      if (!id_profesor) {
+        alert("⚠️ No se encontró el ID del profesor. Inicia sesión nuevamente.");
+        return;
+      }
+
+      try {
+      const res = await fetch(`/api/perfil/${id_profesor}`);
+      const data = await res.json();
+
+      if (res.ok) {
+        document.getElementById("perfil-nombre").textContent = data.nombre;
+        document.getElementById("perfil-correo").textContent = data.correo;
+        document.getElementById("perfil-rol").textContent = data.rol;
+
+        // Mostrar solo la sección de perfil
+        document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
+        perfilSection.style.display = "block";
+      } else {
+        alert(data.error || "Error al obtener perfil");
+      }
+
+    } catch (error) {
+      console.error("🚨 Error al cargar perfil:", error);
+      alert("Error al cargar perfil del profesor");
+    }
+  });
+});
+</script> 
 </body>
 </html>

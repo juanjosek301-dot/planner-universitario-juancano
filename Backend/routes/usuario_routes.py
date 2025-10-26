@@ -54,3 +54,18 @@ def login_usuario():
         return jsonify({'error': 'Correo o clave incorrectos'}), 401
     
   
+@usuario_bp.route("/perfil/<int:id_usuario>", methods=["GET"])
+def obtener_perfil(id_usuario):
+    try:
+        usuario = ControladorUsuarios.obtener_usuario_por_id(id_usuario)
+        if usuario:
+            return jsonify({
+                "id": usuario[0],
+                "nombre": usuario[1],
+                "correo": usuario[2],
+                "rol": usuario[3]
+            }), 200
+        else:
+            return jsonify({"error": "Usuario no encontrado"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

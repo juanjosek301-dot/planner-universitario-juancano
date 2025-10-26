@@ -14,7 +14,7 @@ CORS(app)
 
 app.register_blueprint(usuario_bp, url_prefix="/api")
 app.register_blueprint(curso_bp, url_prefix='/api')
-app.register_blueprint(inscripciones_bp)
+app.register_blueprint(inscripciones_bp,  url_prefix='/api')
 
 @app.route('/')
 def home():

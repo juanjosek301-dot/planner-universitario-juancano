@@ -64,4 +64,19 @@ class ControladorUsuarios:
             return None
         finally:
             cursor.close()
-            conn.close()             
+            conn.close()   
+            
+    @staticmethod
+    def obtener_usuario_por_id(id_usuario):
+        conn = ControladorUsuarios.obtener_conexion()
+        cur = conn.cursor()
+        try:
+            cur.execute("""
+                SELECT id, nombre, correo, rol 
+                FROM usuarios 
+                WHERE id = %s;
+            """, (id_usuario,))
+            return cur.fetchone()
+        finally:
+            cur.close()
+            conn.close()          
