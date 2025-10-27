@@ -43,3 +43,22 @@ def listar_actividades(id_curso):
         return jsonify(actividades_json), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@actividad_bp.route("/actividades_estudiante/<int:id_estudiante>", methods=["GET"])
+def actividades_estudiante(id_estudiante):
+    try:
+        # Devuelve todas las actividades de los cursos en los que está inscrito el estudiante
+        actividades = ControladorActividades.listar_actividades_por_estudiante(id_estudiante)
+        actividades_json = [
+            {
+                "id": a[0],
+                "titulo": a[1],
+                "descripcion": a[2],
+                "fecha_entrega": str(a[3]),
+                "peso": a[4],
+                "id_curso": a[5]
+            } for a in actividades
+        ]
+        return jsonify(actividades_json), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

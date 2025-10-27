@@ -3,6 +3,7 @@ from routes.usuario_routes import usuario_bp
 from routes.curso_routes import curso_bp 
 from routes.inscripciones import inscripciones_bp
 from routes.actividad_routes import actividad_bp
+from routes.entrega_routes import entrega_bp
 import os
 from flask_cors import CORS
 
@@ -17,6 +18,7 @@ app.register_blueprint(usuario_bp, url_prefix="/api")
 app.register_blueprint(curso_bp, url_prefix='/api')
 app.register_blueprint(inscripciones_bp,  url_prefix='/api')
 app.register_blueprint(actividad_bp, url_prefix='/api')
+app.register_blueprint(entrega_bp, url_prefix='/api' )
 
 @app.route('/')
 def home():

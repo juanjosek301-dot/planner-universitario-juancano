@@ -15,6 +15,7 @@ body {
   background-color: var(--blanco);
   display: flex;
   height: 100vh;
+  overflow: hidden;
 }
 
 /* 🔹 Sidebar */
@@ -26,68 +27,64 @@ body {
   align-items: center;
   padding: 20px 0;
   box-shadow: 2px 0 8px rgba(183, 28, 28, 0.08);
+  border-right: 2px solid #fbe9e7; /* contorno suave */
+  gap: 40px;
 }
 
-.logo img{
-  width: 70px; /* ajusta según lo que necesites */
-  height: auto;
-}
-/* 🔸 Logo superior */
-.sidebar .logo {
-  margin-bottom: 20px;
-}
-
+/* Logo principal */
 .sidebar .logo img {
   width: 50px;
   height: auto;
+  border-radius: 12px;
+  border: 2px solid var(--blanco);
+  padding: 5px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* 🔸 Navegación de íconos */
+.sidebar .logo img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Navegación de íconos */
 .sidebar nav ul {
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.sidebar nav ul li {
-  margin: 20px 0;
-}
-
-.sidebar nav ul li a {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .sidebar nav ul li img {
-  width: 32px;
-  height: 32px;
-  transition: transform 0.2s ease;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  padding: 5px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .sidebar nav ul li img:hover {
   transform: scale(1.1);
+  border-color: var(--blanco);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 
-/* 🔸 Footer con mascota o ícono extra */
-.sidebar .footer-logo {
-  margin-top: 20px;
+
+/* Botones de sidebar funcionales */
+#btn-perfil {
+  display: block;
 }
 
-.sidebar .footer-logo img {
-  width: 40px;
-  height: auto;
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
+#btn-mensajes {
+  display: block;
 }
 
-.sidebar .footer-logo img:hover {
-  opacity: 1;
-}
-
-.sidebar img {
-  width: 40px;
-  margin: 15px 0;
+/* Eliminar tareas y otros íconos no funcionales */
+.sidebar nav ul li.inactivo {
+  display: none;
 }
 
 /* 🔸 Contenido principal */
@@ -111,52 +108,51 @@ section {
 
 section h2 {
   font-size: 20px;
-  color: #000
+  color: var(--rojo-institucional);
   margin-bottom: 10px;
 }
 
-/* Formularios */
-#form-agregar-curso {
+/* 🔹 Formularios */
+form {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 15px;
-  align-items: stretch;
+  margin-bottom: 20px;
 }
 
-#form-agregar-curso input {
+form input,
+form select,
+form textarea {
   padding: 10px;
   border: 1.5px solid var(--rojo-claro);
   border-radius: 8px;
   font-size: 15px;
-  transition: border 0.2s;
+  width: 100%;
 }
 
-#form-agregar-curso button {
-  width: 100%;
+form button {
+  width: max-content;
   background: linear-gradient(90deg, var(--rojo-institucional) 60%, var(--rojo-claro) 100%);
   color: var(--blanco);
   border: none;
-  padding: 10px 0;
+  padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  font-size: 20px;
-  box-shadow: 0 2px 8px rgba(183, 28, 28, 0.08);
+  font-size: 16px;
   transition: background 0.2s, transform 0.1s;
-  margin-top: 5px;
 }
 
-button:hover {
+form button:hover {
   background: linear-gradient(90deg, var(--rojo-claro) 60%, var(--rojo-institucional) 100%);
   transform: translateY(-2px) scale(1.04);
 }
 
-button:active {
+form button:active {
   transform: scale(0.98);
 }
 
-/* Cursos */
+/* 🔹 Cursos */
 #lista-cursos {
   list-style: none;
   padding: 0;
@@ -170,21 +166,24 @@ button:active {
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  font-size: 20px;
   gap: 8px;
+  font-size: 16px;
 }
 
-.curso-item span {
-  margin-bottom: 4px;
+.curso-item h3 {
+  margin: 0;
 }
 
-.btn-eliminar {
-  width: 100%;
-  background: linear-gradient(90deg, var(--rojo-claro) 60%, var(--rojo-institucional) 100%);
+.curso-item p {
+  margin: 2px 0;
+}
+
+.btn-inscribirse {
+  width: max-content;
+  padding: 8px 15px;
+  background: linear-gradient(90deg, var(--rojo-institucional) 60%, var(--rojo-claro) 100%);
   color: var(--blanco);
   border: none;
-  padding: 7px 0;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
@@ -192,67 +191,25 @@ button:active {
   transition: background 0.2s, transform 0.1s;
 }
 
-.btn-eliminar:hover {
-  background: linear-gradient(90deg, var(--rojo-institucional) 60%, var(--rojo-claro) 100%);
-  transform: translateY(-2px) scale(1.04);
+.btn-inscribirse:hover {
+  background: linear-gradient(90deg, var(--rojo-claro) 60%, var(--rojo-institucional) 100%);
+  transform: scale(1.04);
 }
 
-/* 🧭 Pestañas */
-.tabs-nav {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+/* 🔹 Montar tarea y contenido */
+.contenido-entrega-section {
+  margin-top: 20px;
 }
 
-.tab-btn {
-  padding: 10px 22px;
-  background: var(--rojo-claro);
-  color: var(--blanco);
-  border: none;
-  border-radius: 8px 8px 0 0;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
-  transition: background 0.2s, color 0.2s;
-}
-
-.tab-btn.active {
-  background: var(--rojo-institucional);
-  color: var(--blanco);
-  border-bottom: 3px solid var(--blanco);
-}
-
-.tab-btn:hover:not(.active) {
-  background: #d32f2f;
-}
-
-.tab-content {
-  display: none;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.tab-content.active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* 📌 Actividades */
-#lista-actividades li {
-  background-color: var(--blanco);
-  padding: 12px;
-  margin-bottom: 10px;
-  border-left: 5px solid var(--rojo-institucional);
-  border-radius: 8px;
-  font-size: 15px;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-#lista-actividades li:hover {
-  box-shadow: 0 4px 12px rgba(183, 28, 28, 0.15);
-  transform: scale(1.02);
+#contenido-entrega {
+  background: #f4f4f4;
+  padding: 10px;
+  border: 1px solid var(--gris-medio);
+  border-radius: 6px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 /* ⚠️ Alertas */
@@ -295,4 +252,28 @@ button:active {
   padding: 22px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(183, 28, 28, 0.08);
+}
+
+/* 🧩 Estilos generales de listas */
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--rojo-claro);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f4;
 }

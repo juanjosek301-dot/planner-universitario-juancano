@@ -48,3 +48,19 @@ class ControladorActividades:
         cursor.close()
         conn.close()
         return actividades
+    
+    @staticmethod
+    def listar_actividades_por_estudiante(id_estudiante):
+        conn = ControladorActividades.obtener_conexion()
+        cursor = conn.cursor()
+        query = """
+            SELECT a.id, a.titulo, a.descripcion, a.fecha_entrega, a.peso, a.id_curso
+            FROM actividades a
+            JOIN inscripciones i ON a.id_curso = i.id_curso
+            WHERE i.id_estudiante = %s
+        """
+        cursor.execute(query, (id_estudiante,))
+        resultados = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return resultados

@@ -15,21 +15,20 @@
 </head>
 
 <body>
-  <!-- 🔹 Sidebar -->
   <aside class="sidebar">
-    <div class="logo">
-      <!-- ✅ Imagen servida desde carpeta static -->
-      <img src="{{ url_for('static', filename='public/images/Uplannner.png') }}" alt="UPlanner Logo" />
-    </div>
-    <nav>
-      <ul>
-        <img src="{{ url_for('public_files', filename='images/Uplannner.png') }}" alt="UPlanner Logo" />
-        <img src="{{ url_for('public_files', filename='images/perfil.png') }}" alt="Perfil" />
-        <img src="{{ url_for('public_files', filename='images/tarea..png') }}" alt="Tareas" />
-        <img src="{{ url_for('public_files', filename='images/logo_chat.png') }}" alt="Mensajes" />
-      </ul>
-    </nav>
-  </aside>
+  <!-- Logo principal -->
+  <div class="logo">
+    <img src="{{ url_for('static', filename='public/images/Uplannner.png') }}" alt="UPlanner Logo" id="btn-logo"/>
+  </div>
+
+  <!-- Navegación funcional -->
+  <nav>
+    <ul>
+      <li><img src="{{ url_for('public_files', filename='images/perfil.png') }}" alt="Perfil" id="btn-perfil"/></li>
+      <li><img src="{{ url_for('public_files', filename='images/logo_chat.png') }}" alt="Mensajes" id="btn-mensajes"/></li>
+    </ul>
+  </nav>
+</aside>
 
   <!-- 🔸 Contenido principal -->
   <main class="main-content">
@@ -43,11 +42,30 @@
       <ul id="lista-cursos"></ul>
     </section>
 
-    <!-- 📌 Actividades -->
-    <section class="actividades-section">
-      <h2>Actividades del curso</h2>
-      <button id="btn-agregar-actividad" style="margin-bottom:10px;">Agregar actividad</button>
-      <ul id="lista-actividades"></ul>
+    <section id="montar-tarea">
+      <h2>Montar tarea</h2>
+
+      <form id="form-entrega">
+        <label>Seleccionar actividad:</label>
+        <select id="select-actividad" required>
+          <option value="">Selecciona una actividad</option>
+        </select>
+
+        <label>Archivo:</label>
+        <input type="file" id="archivo_input" required>
+
+        <button type="submit">Enviar Entrega</button>
+        </form>
+    </section>
+
+    <!-- Mostrar contenido de la entrega -->
+    <section class="contenido-entrega-section">
+      <h2>Contenido de la entrega</h2>
+      <select id="select-entrega">
+        <option value="">Selecciona una entrega</option>
+      </select>
+      <button id="btn-ver-contenido">Ver contenido</button>
+      <pre id="contenido-entrega" style="background:#f4f4f4; padding:10px; border:1px solid #ccc;"></pre>
     </section>
 
     <!-- ⚠️ Alertas -->
@@ -133,6 +151,164 @@
   });
 });
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const id_estudiante = localStorage.getItem("id_estudiante");
+    const selectActividad = document.getElementById("select-actividad");
+    const formEntrega = document.getElementById("form-entrega");
+    const archivoInput = document.getElementById("archivo_input");
+
+    if (!id_estudiante) {
+      alert("⚠️ No se encontró el ID del estudiante. Inicia sesión nuevamente.");
+      window.location.href = "/";
+      return;
+    }
+
+    // 🔹 Cargar actividades disponibles para el estudiante
+    async function cargarActividades() {
+      try {
+        const res = await fetch(`/api/actividades_estudiante/${id_estudiante}`);
+        const actividades = await res.json();
+
+        if (!res.ok) {
+          console.error("🚨 Error del servidor:", actividades.error);
+          alert("Error al obtener actividades: " + actividades.error);
+          return;
+        }
+
+        selectActividad.innerHTML = '<option value="">Selecciona una actividad</option>';
+
+        actividades.forEach(act => {
+          const option = document.createElement("option");
+          option.value = act.id;
+          option.textContent = `${act.titulo} (Entrega: ${act.fecha_entrega})`;
+          selectActividad.appendChild(option);
+        });
+
+        console.log("🔹 Actividades cargadas:", actividades);
+
+      } catch (error) {
+        console.error("🚨 Error al cargar actividades:", error);
+        alert("Error al obtener las actividades: " + error.message);
+      }
+  }
+
+  cargarActividades();
+
+    // 🔹 Evento submit para enviar entrega
+    formEntrega.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const id_actividad = selectActividad.value;
+
+      if (!id_actividad) {
+        alert("Selecciona una actividad primero.");
+        return;
+      }
+
+      if (archivoInput.files.length === 0) {
+        alert("Selecciona un archivo para subir.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("id_estudiante", id_estudiante);
+      formData.append("id_actividad", id_actividad);
+      formData.append("archivo", archivoInput.files[0]);
+
+      try {
+        const res = await fetch("/api/entregas", {
+          method: "POST",
+          body: formData
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(data.mensaje || "✅ Entrega realizada correctamente.");
+        formEntrega.reset();
+      } else {
+        alert("⚠️ " + (data.error || "Error al enviar la entrega."));
+      }
+
+      console.log("🔹 Respuesta del servidor:", data);
+
+      } catch (error) {
+        console.error("🚨 Error al enviar entrega:", error);
+        alert("🚨 Error de conexión con el servidor: " + error.message);
+      }
+    });
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const id_estudiante = localStorage.getItem("id_estudiante");
+    const selectEntrega = document.getElementById("select-entrega");
+    const btnVer = document.getElementById("btn-ver-contenido");
+    const contenidoBox = document.getElementById("contenido-entrega");
+
+    if (!id_estudiante) {
+      alert("⚠️ No se encontró el ID del estudiante. Inicia sesión nuevamente.");
+      window.location.href = "/";
+      return;
+    }
+
+    // 🔹 Cargar todas las entregas del estudiante
+    async function cargarEntregas() {
+      try {
+        const res = await fetch(`/api/entregas_estudiante/${id_estudiante}`);
+        const entregas = await res.json();
+
+        selectEntrega.innerHTML = '<option value="">Selecciona una entrega</option>';
+
+        entregas.forEach(e => {
+          const option = document.createElement("option");
+          option.value = e.id;
+          option.textContent = `Actividad: ${e.id_actividad} - Estado: ${e.estado}`;
+          selectEntrega.appendChild(option);
+        });
+      } catch (error) {
+        console.error("🚨 Error al cargar entregas:", error);
+        alert("Error al obtener las entregas.");
+      }
+    }
+
+    // Llamar la función al cargar la página
+    cargarEntregas();
+
+    // 🔹 Evento click para ver contenido de la entrega seleccionada
+    btnVer.addEventListener("click", async () => {
+      const id_entrega = selectEntrega.value;
+      if (!id_entrega) {
+        alert("Selecciona una entrega primero.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/entrega_contenido/${id_entrega}`);
+        const data = await res.json();
+
+        if (data.error) {
+          contenidoBox.textContent = "❌ " + data.error;
+        } else {
+          contenidoBox.textContent = data.contenido;
+        }
+
+      } catch (error) {
+        console.error("🚨 Error al obtener contenido:", error);
+        contenidoBox.textContent = "Error de conexión con el servidor.";
+      }
+    });
+});
+</script>
+
+
+
+  
+  
+
 
   
     
