@@ -88,6 +88,31 @@
       <h2>Mis Cursos</h2>
       <ul id="lista-cursos"></ul>
     </section>
+
+    <section id="crear-actividad">
+      <h2>Crear nueva actividad</h2>
+
+      <form id="form-actividad">
+        <label>Curso:</label>
+        <select id="select-curso">
+          <option value="">Selecciona un curso</option>
+        </select>
+
+        <label>titulo:</label>
+        <input type="text" id="titulo" required>
+
+        <label>Descripción:</label>
+        <textarea id="descripcion" required></textarea>
+
+        <label>Fecha de entrega:</label>
+        <input type="date" id="fecha_entrega" required>
+
+        <label>Peso (%):</label>
+        <input type="number" id="peso" min="1" max="100" required>
+
+        <button type="submit">Crear Actividad</button>
+      </form>
+    </section>
   </main>
 
   </main>
@@ -125,6 +150,11 @@
 
         const data = await res.json();
         console.log("📥 Respuesta del servidor:", data);
+        if (data.id) {
+          // Guarda el ID del curso recién creado
+          localStorage.setItem("id_curso", data.id);
+          alert("✅ Curso creado correctamente");
+          }
 
         if (res.ok) {
           alert("✅ Curso creado correctamente");
@@ -216,5 +246,88 @@
   });
 });
 </script> 
+
+<!-- implementacion crear tarea ("REVISAR DESCRIPCION BASE DE DATOS") -->
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const id_profesor = localStorage.getItem("id_profesor");
+
+    if (!id_profesor) {
+      alert("⚠️ No se encontró el ID del profesor. Inicia sesión nuevamente.");
+      window.location.href = "/";
+      return;
+    }
+
+    const selectCurso = document.getElementById("select-curso");
+
+    try {
+      const res = await fetch(`/api/cursos/${id_profesor}`);
+      const cursos = await res.json();
+
+      if (cursos.length === 0) {
+        alert("No tienes cursos creados aún. Crea uno antes de agregar actividades.");
+        return;
+      }
+
+      // 🔹 Llenar el select con los cursos
+      cursos.forEach(curso => {
+        const option = document.createElement("option");
+        option.value = curso.id;
+        option.textContent = `${curso.nombre} (${curso.codigo})`;
+        selectCurso.appendChild(option);
+      });
+
+    // Si solo hay un curso, seleccionarlo automáticamente
+      if (cursos.length === 1) {
+        selectCurso.value = cursos[0].id;
+      }
+
+    } catch (error) {
+      console.error("🚨 Error al cargar cursos:", error);
+      alert("Error al obtener los cursos del profesor.");
+    }
+
+    // 🔹 Evento submit del formulario
+    const form = document.getElementById("form-actividad");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const id_curso = selectCurso.value;
+      const titulo = document.getElementById("titulo").value;
+      const descripcion = document.getElementById("descripcion").value;
+      const fecha_entrega = document.getElementById("fecha_entrega").value;
+      const peso = document.getElementById("peso").value;
+
+      if (!id_curso) {
+        alert("Selecciona un curso antes de crear la actividad.");
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/actividades", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_curso,
+            titulo,          
+            descripcion,
+            fecha_entrega,
+            peso
+          })
+        });
+
+        console.log({id_curso, titulo, descripcion, fecha_entrega, peso});
+
+        const data = await res.json();
+        alert(data.mensaje || data.error);
+
+      } catch (error) {
+        console.error("🚨 Error al crear actividad:", error);
+        alert("Error al conectar con el servidor.");
+      }
+  });
+});
+</script>
+
 </body>
 </html>
