@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from controller.controlador_actividades import ControladorActividades
 from model.Actividades import Actividad
+from decimal import Decimal
 
 actividad_bp = Blueprint('actividad_bp', __name__, url_prefix='/api')
 
@@ -12,16 +13,35 @@ def crear_actividad():
     if not data:
         return jsonify({"error": "No se recibieron datos"}), 400
 
+    id_curso = data.get("id_curso")
+    peso = Decimal(str(data.get("peso", 0)))  # ✅ convertir a Decimal
+
     try:
+        # 1️⃣ Validar suma de pesos
+        conn = ControladorActividades.obtener_conexion()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COALESCE(SUM(peso),0) FROM actividades WHERE id_curso=%s", (id_curso,))
+        suma_actual = cursor.fetchone()[0]
+        cursor.close()
+        conn.close()
+
+        if suma_actual + peso > 100:
+            return jsonify({
+                "error": f"No se puede crear la actividad. La suma de pesos actual es {suma_actual}%, "
+                        f"agregando esta actividad excedería 100%."
+            }), 400
+
+        # 2️⃣ Crear actividad normalmente
         actividad = Actividad(
-            id_curso=data.get("id_curso"),
+            id_curso=id_curso,
             titulo=data.get("titulo"),
             descripcion=data.get("descripcion"),
             fecha_entrega=data.get("fecha_entrega"),
-            peso=data.get("peso")
+            peso=peso
         )
         nuevo_id = ControladorActividades.insertar_actividad(actividad)
         return jsonify({"mensaje": "Actividad creada correctamente", "id": nuevo_id}), 201
+
     except Exception as e:
         print("❌ Error al crear actividad:", e)
         return jsonify({"error": str(e)}), 500

@@ -5,6 +5,7 @@ from routes.inscripciones import inscripciones_bp
 from routes.actividad_routes import actividad_bp
 from routes.entrega_routes import entrega_bp
 from routes.montar_routes import montar_nota_bp
+from routes.porgreso_routes import progreso_bp
 import os
 from flask_cors import CORS
 
@@ -21,6 +22,7 @@ app.register_blueprint(inscripciones_bp,  url_prefix='/api')
 app.register_blueprint(actividad_bp, url_prefix="/api")
 app.register_blueprint(entrega_bp, url_prefix='/api' )
 app.register_blueprint(montar_nota_bp)
+app.register_blueprint(progreso_bp)
 
 @app.route('/')
 def home():

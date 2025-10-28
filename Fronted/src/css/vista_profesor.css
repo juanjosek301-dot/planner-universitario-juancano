@@ -84,6 +84,86 @@ body {
   box-shadow: 0 4px 12px var(--sombra);
 }
 
+/* === CONTENEDOR DEL DASHBOARD === */
+.dashboard-progreso {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+/* === TARJETA DE CURSO === */
+.curso-progreso {
+  background-color: var(--blanco);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px var(--sombra);
+  padding: 24px;
+}
+
+.curso-progreso h3 {
+  color: var(--rojo);
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+}
+
+/* === TABLA DE PROGRESO === */
+.tabla-progreso {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-progreso th,
+.tabla-progreso td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--borde);
+}
+
+.tabla-progreso th {
+  background-color: var(--gris-medio);
+  color: var(--texto);
+}
+
+.tabla-progreso td {
+  background-color: var(--gris-claro);
+}
+
+/* === ESTADOS DE ENTREGA === */
+.estado-entregado {
+  color: green;
+  font-weight: 600;
+}
+
+.estado-pendiente {
+  color: orange;
+  font-weight: 600;
+}
+
+.estado-retrasado {
+  color: var(--rojo);
+  font-weight: 600;
+}
+
+/* === PROMEDIO === */
+.promedio {
+  font-weight: 700;
+  color: var(--rojo);
+}
+
+/* === RESPONSIVO === */
+@media (max-width: 768px) {
+  .tabla-progreso th,
+  .tabla-progreso td {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+  
+  .curso-progreso h3 {
+    font-size: 1.2rem;
+  }
+}
+
+
 /* TITULOS SECCIONES */
 .card h2 {
   color: var(--rojo);
