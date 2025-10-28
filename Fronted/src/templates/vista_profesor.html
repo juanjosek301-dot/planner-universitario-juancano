@@ -118,13 +118,27 @@
     </section>
 
     <section id="dashboard-progreso">
-      <h2>📊 Progreso de Estudiantes</h2>
-      <select id="select-curso-progreso">
-        <option value="">Selecciona un curso</option>
-      </select>
+  <h2>📊 Progreso de Estudiantes</h2>
+  <select id="select-curso-progreso">
+    <option value="">Selecciona un curso</option>
+  </select>
 
-      <div id="tabla-progreso"></div>
-    </section>
+  <div id="tabla-progreso">
+    <table class="tabla-progreso">
+      <thead>
+        <tr>
+          <th>Estudiante</th>
+          <!-- Columnas de actividades dinámicas -->
+          <th>Promedio</th>
+          <th>Alertas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Aquí se llenarán los datos con JS -->
+      </tbody>
+    </table>
+  </div>
+</section>
 
   </main>
 
@@ -512,6 +526,94 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const selectCurso = document.getElementById("select-curso-progreso");
+  const tablaDiv = document.getElementById("tabla-progreso");
+  const id_profesor = parseInt(localStorage.getItem("id_profesor"));
 
-</body>
-</html>
+  if (!id_profesor) {
+    tablaDiv.innerHTML = '<p style="color:red;">No se encontró el ID del profesor. Inicia sesión nuevamente.</p>';
+    return;
+  }
+
+  // 1️⃣ Cargar cursos del profesor
+  async function cargarCursos() {
+    try {
+      const res = await fetch(`/api/cursos/${id_profesor}`);
+      const cursos = await res.json();
+
+      selectCurso.innerHTML = '<option value="">-- Selecciona un curso --</option>';
+      cursos.forEach(c => {
+        const option = document.createElement("option");
+        option.value = c.id;
+        option.textContent = c.nombre;
+        selectCurso.appendChild(option);
+      });
+    } catch (error) {
+      console.error("Error al cargar cursos:", error);
+      tablaDiv.innerHTML = '<p style="color:red;">Error al cargar cursos</p>';
+    }
+  }
+
+  // 2️⃣ Cargar progreso al seleccionar curso
+  selectCurso.addEventListener("change", async () => {
+    const id_curso = selectCurso.value;
+    if (!id_curso) {
+      tablaDiv.innerHTML = "";
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/progreso/${id_curso}`);
+      const data = await res.json();
+
+      if (data.error) {
+        tablaDiv.innerHTML = `<p style="color:red;">${data.error}</p>`;
+        return;
+      }
+
+      // Construir tabla
+      let html = "<table class='tabla-progreso'><thead><tr><th>Estudiante</th>";
+      data.actividades.forEach(a => html += `<th>${a}</th>`);
+      html += "<th>Promedio</th><th>Alertas</th></tr></thead><tbody>";
+
+      data.estudiantes.forEach(est => {
+        html += `<tr><td>${est.nombre}</td>`;
+
+        // Actividades
+        est.actividades.forEach(act => {
+          let color = "black";
+          if (act.estado === "Pendiente") color = "orange";
+          else if (act.calificacion !== null && act.calificacion < 3) color = "red";
+
+          html += `<td style="color:${color}">${act.calificacion !== null ? act.calificacion : act.estado}</td>`;
+        });
+
+        // Promedio
+        let promColor = (est.promedio !== null && est.promedio < 3) ? "red" : "black";
+        html += `<td style="color:${promColor}">${est.promedio !== null ? est.promedio : "N/A"}</td>`;
+
+        // Alertas
+        if (est.alertas.length > 0) {
+          html += `<td>${est.alertas.map(a => `<span class="alerta">${a}</span>`).join("<br>")}</td>`;
+        } else {
+          html += `<td>-</td>`;
+        }
+
+        html += "</tr>";
+      });
+
+      html += "</tbody></table>";
+      tablaDiv.innerHTML = html;
+
+    } catch (error) {
+      console.error(error);
+      tablaDiv.innerHTML = '<p style="color:red;">Error al conectar con el servidor</p>';
+    }
+  });
+
+  // Inicializamos cursos al cargar la página
+  cargarCursos();
+});
+</script>

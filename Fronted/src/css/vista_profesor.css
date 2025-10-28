@@ -307,3 +307,45 @@ select:focus {
     font-size: 1.6rem;
   }
 }
+
+#progreso-estudiantes {
+  background-color: var(--blanco);
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px var(--sombra);
+  max-width: 1000px;
+  margin-bottom: 40px;
+}
+
+#progreso-estudiantes h2 {
+  color: var(--rojo);
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.table-progreso {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-progreso th, .table-progreso td {
+  border: 1px solid var(--borde);
+  padding: 10px;
+  text-align: center;
+}
+
+.table-progreso th {
+  background-color: var(--rojo);
+  color: var(--blanco);
+}
+
+.alerta {
+  background-color: var(--rojo-oscuro);
+  color: var(--blanco);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  display: inline-block;
+  margin-top: 4px;
+}

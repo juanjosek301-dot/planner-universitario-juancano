@@ -40,12 +40,6 @@ def vista_estudiante():
 @app.route('/profesor')
 def vista_profesor():
     return render_template('vista_profesor.html')
-
-if __name__ == '__main__':
-    print("🔍 Blueprints registrados:")
-    for name, bp in app.blueprints.items():
-        print(f" - {name} -> {bp.url_prefix}")
-    app.run(port=5000, debug=True)
     
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

@@ -1,6 +1,7 @@
 import psycopg2
 from controller.entrega_controller import ControladorEntregas
 import SecretConfig  # tus credenciales de DB
+from decimal import Decimal
 
 class ControladorProgreso:
 
@@ -31,25 +32,30 @@ class ControladorProgreso:
                 JOIN inscripciones i ON u.id = i.id_estudiante
                 WHERE i.id_curso = %s AND u.rol = 'estudiante'
             """, (id_curso,))
-            estudiantes = cursor.fetchall()  # [(id, nombre), ...]
+            estudiantes = cursor.fetchall()  
 
             # 2️⃣ Obtener actividades del curso
             cursor.execute("""
-                SELECT id, titulo
+                SELECT id, titulo, peso
                 FROM actividades
                 WHERE id_curso = %s
                 ORDER BY fecha_entrega
             """, (id_curso,))
-            actividades = cursor.fetchall()  # [(id, titulo), ...]
+            actividades = cursor.fetchall()  
 
-            # 3️⃣ Construir progreso
             progreso = []
             for est_id, est_nombre in estudiantes:
-                est_data = {"id": est_id, "nombre": est_nombre, "actividades": [], "promedio": 0}
-                suma = 0
-                count = 0
+                est_data = {
+                    "id": est_id,
+                    "nombre": est_nombre,
+                    "actividades": [],
+                    "promedio": None,
+                    "alertas": []
+                }
+                suma_ponderada = Decimal('0')
+                suma_pesos = Decimal('0')
 
-                for act_id, act_titulo in actividades:
+                for act_id, act_titulo, act_peso in actividades:
                     cursor.execute("""
                         SELECT calificacion, estado
                         FROM entregas
@@ -59,23 +65,34 @@ class ControladorProgreso:
                     cal = entrega[0] if entrega and entrega[0] is not None else None
                     estado = entrega[1] if entrega else "Pendiente"
 
-                    if cal is not None:
-                        suma += cal
-                        count += 1
-
+                    # Agregar alerta si la tarea está pendiente
+                    if cal is None:
+                        est_data["alertas"].append(f"Tarea pendiente: {act_titulo}")
+                    else:
+                        suma_ponderada += Decimal(cal) * Decimal(act_peso) / Decimal(100)
+                        suma_pesos += Decimal(act_peso)
+                        
                     est_data["actividades"].append({
                         "titulo": act_titulo,
                         "calificacion": cal,
                         "estado": estado
                     })
 
-                est_data["promedio"] = round(suma / count, 2) if count > 0 else None
+                # Calcular promedio ponderado
+                if suma_pesos > 0:
+                    promedio = round(float(suma_ponderada), 2)
+                    est_data["promedio"] = promedio
+
+                # Agregar alerta si el promedio es menor a 3
+                    if promedio < 3.0:
+                        est_data["alertas"].append("Bajo desempeño académico")
+                        
                 progreso.append(est_data)
 
-            return {"actividades": [a[1] for a in actividades], "estudiantes": progreso}
-
-        except Exception as e:
-            raise e
+            return {
+                "actividades": [a[1] for a in actividades],  # lista de títulos de actividades
+                "estudiantes": progreso
+            }
 
         finally:
             cursor.close()
