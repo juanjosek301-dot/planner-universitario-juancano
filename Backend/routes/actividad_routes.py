@@ -62,3 +62,8 @@ def actividades_estudiante(id_estudiante):
         return jsonify(actividades_json), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@actividad_bp.route("/profesor/<int:id_profesor>")
+def actividades_por_profesor(id_profesor):
+    actividades = ControladorActividades.listar_por_profesor(id_profesor)
+    return jsonify(actividades)

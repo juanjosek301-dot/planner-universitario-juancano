@@ -4,6 +4,7 @@ from routes.curso_routes import curso_bp
 from routes.inscripciones import inscripciones_bp
 from routes.actividad_routes import actividad_bp
 from routes.entrega_routes import entrega_bp
+from routes.montar_routes import montar_nota_bp
 import os
 from flask_cors import CORS
 
@@ -17,8 +18,9 @@ CORS(app)
 app.register_blueprint(usuario_bp, url_prefix="/api")
 app.register_blueprint(curso_bp, url_prefix='/api')
 app.register_blueprint(inscripciones_bp,  url_prefix='/api')
-app.register_blueprint(actividad_bp, url_prefix='/api')
+app.register_blueprint(actividad_bp, url_prefix="/api")
 app.register_blueprint(entrega_bp, url_prefix='/api' )
+app.register_blueprint(montar_nota_bp)
 
 @app.route('/')
 def home():
@@ -37,5 +39,11 @@ def vista_estudiante():
 def vista_profesor():
     return render_template('vista_profesor.html')
 
+if __name__ == '__main__':
+    print("🔍 Blueprints registrados:")
+    for name, bp in app.blueprints.items():
+        print(f" - {name} -> {bp.url_prefix}")
+    app.run(port=5000, debug=True)
+    
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

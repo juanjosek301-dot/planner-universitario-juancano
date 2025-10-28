@@ -106,4 +106,9 @@ def listar_entregas_por_estudiante(id_estudiante):
         return jsonify(entregas_json), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 
+@entrega_bp.route("/actividad/<int:id_actividad>")
+def entregas_por_actividad(id_actividad):
+    entregas = ControladorEntregas.listar_entregas_por_actividad(id_actividad)
+    return jsonify(entregas)

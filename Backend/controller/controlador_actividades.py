@@ -64,3 +64,32 @@ class ControladorActividades:
         cursor.close()
         conn.close()
         return resultados
+    
+    # ✅ Método que faltaba
+    @staticmethod
+    def listar_por_profesor(id_profesor):
+        conn = ControladorActividades.obtener_conexion()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT a.id, a.id_curso, a.titulo, a.descripcion, a.fecha_entrega, a.peso
+            FROM actividades a
+            JOIN cursos c ON a.id_curso = c.id
+            WHERE c.id_profesor = %s
+            ORDER BY a.fecha_entrega DESC
+        """, (id_profesor,))
+        resultados = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        # Convertir a lista de diccionarios para jsonify
+        actividades = []
+        for row in resultados:
+            actividades.append({
+                "id": row[0],
+                "id_curso": row[1],
+                "titulo": row[2],
+                "descripcion": row[3],
+                "fecha_entrega": str(row[4]),
+                "peso": float(row[5])
+            })
+        return actividades
