@@ -68,27 +68,13 @@
       <pre id="contenido-entrega" style="background:#f4f4f4; padding:10px; border:1px solid #ccc;"></pre>
     </section>
 
-    <!-- ⚠️ Alertas -->
-    <section class="alertas-section">
-      <h2>Alertas académicas</h2>
-      <button id="btn-ver-alertas" style="margin-bottom:10px;">Ver alertas</button>
-      <div id="alertas-list"></div>
-    </section>
+    <button onclick="irAlAgente()" class="btn-agente">Abrir asistente académico</button>
 
-    <!-- 🤖 Recomendaciones -->
-    <section class="recomendaciones-section">
-      <h2>Recomendaciones inteligentes</h2>
-      <button id="btn-ver-recomendaciones" style="margin-bottom:10px;">Ver recomendaciones</button>
-      <div id="recomendaciones-list"></div>
-    </section>
-
-    <!-- 📅 Calendario -->
-    <section class="calendario-section">
-      <h2>Calendario académico</h2>
-      <button id="btn-ver-calendario" style="margin-bottom:10px;">Ver calendario</button>
-      <div id="calendario-widget"></div>
-    </section>
-  </main>
+<script>
+  function irAlAgente() {
+  window.location.href = "http://127.0.0.1:5000/agente";
+}
+</script>
 
 <script>
 

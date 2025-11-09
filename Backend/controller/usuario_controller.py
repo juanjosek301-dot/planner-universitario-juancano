@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import extras
 from model.Usuario import Usuario
 import SecretConfig
 
@@ -79,4 +80,20 @@ class ControladorUsuarios:
             return cur.fetchone()
         finally:
             cur.close()
-            conn.close()          
+            conn.close()
+            
+    @staticmethod
+    def obtener_profesor_por_id(profesor_id):
+        conn = ControladorUsuarios.obtener_conexion()
+        cursor = conn.cursor(cursor_factory=extras.DictCursor)  
+        cursor.execute("""
+            SELECT id, nombre, correo, rol
+            FROM usuarios
+            WHERE id = %s AND rol = 'profesor';
+        """, (profesor_id,))
+        profesor = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return profesor
+            
+             

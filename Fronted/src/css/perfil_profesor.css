@@ -1,0 +1,80 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #5b86e5, #36d1dc);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.perfil-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.perfil-card {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    width: 380px;
+    text-align: center;
+    padding: 25px 30px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.perfil-header {
+    margin-bottom: 20px;
+}
+
+.perfil-foto {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 3px solid #36d1dc;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.rol {
+    color: #777;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+}
+
+.perfil-info {
+    text-align: left;
+    margin-top: 15px;
+}
+
+.perfil-info p {
+    margin: 8px 0;
+    font-size: 0.95em;
+}
+
+.perfil-actions {
+    margin-top: 20px;
+}
+
+.btn-volver {
+    background-color: #36d1dc;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.btn-volver:hover {
+    background-color: #5b86e5;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

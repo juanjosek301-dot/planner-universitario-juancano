@@ -20,48 +20,97 @@ body {
   overflow: hidden;
 }
 
-/* SIDEBAR */
+/* === SIDEBAR === */
 .sidebar {
-  width: 90px;
+  width: 240px;
   background-color: var(--rojo);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 0;
-  gap: 24px;
+  justify-content: space-between;
+  padding: 30px 0;
   box-shadow: 3px 0 10px var(--sombra);
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
 }
 
-.sidebar img {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  transition: transform var(--transicion);
+/* Logo sección */
+.logo-section {
+  text-align: center;
 }
 
-.sidebar img:hover {
-  transform: scale(1.1);
-}
-
-.sidebar button {
-  margin-top: auto;
+.logo-circle {
   background-color: var(--blanco);
   color: var(--rojo);
-  border: 1px solid var(--rojo);
-  padding: 10px 16px;
-  border-radius: 8px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 auto 10px;
+}
+
+.logo-section h2 {
+  color: var(--blanco);
+  font-size: 20px;
+  margin: 0;
+}
+
+/* Menú */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  padding: 0 25px;
+}
+
+.menu-item {
+  color: var(--blanco);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  transition: background-color var(--transicion), transform var(--transicion);
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(6px);
+}
+
+/* Botón de cierre de sesión */
+.logout-btn {
+  background-color: var(--blanco);
+  color: var(--rojo);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: var(--transicion);
 }
 
-.sidebar button:hover {
+.logout-btn:hover {
   background-color: var(--rojo-oscuro);
   color: var(--blanco);
+  transform: scale(1.05);
 }
 
-/* MAIN CONTENT */
+/* === CONTENIDO PRINCIPAL === */
 .main-content {
+  margin-left: 240px; /* espacio del sidebar */
   flex: 1;
   padding: 40px 5vw;
   overflow-y: auto;
@@ -76,7 +125,7 @@ body {
   margin-bottom: 30px;
 }
 
-/* TARJETAS */
+/* === TARJETAS === */
 .card {
   background-color: var(--blanco);
   padding: 32px;
@@ -84,87 +133,7 @@ body {
   box-shadow: 0 4px 12px var(--sombra);
 }
 
-/* === CONTENEDOR DEL DASHBOARD === */
-.dashboard-progreso {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  margin-top: 20px;
-}
-
-/* === TARJETA DE CURSO === */
-.curso-progreso {
-  background-color: var(--blanco);
-  border-radius: 14px;
-  box-shadow: 0 4px 12px var(--sombra);
-  padding: 24px;
-}
-
-.curso-progreso h3 {
-  color: var(--rojo);
-  font-size: 1.4rem;
-  margin-bottom: 16px;
-}
-
-/* === TABLA DE PROGRESO === */
-.tabla-progreso {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.tabla-progreso th,
-.tabla-progreso td {
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid var(--borde);
-}
-
-.tabla-progreso th {
-  background-color: var(--gris-medio);
-  color: var(--texto);
-}
-
-.tabla-progreso td {
-  background-color: var(--gris-claro);
-}
-
-/* === ESTADOS DE ENTREGA === */
-.estado-entregado {
-  color: green;
-  font-weight: 600;
-}
-
-.estado-pendiente {
-  color: orange;
-  font-weight: 600;
-}
-
-.estado-retrasado {
-  color: var(--rojo);
-  font-weight: 600;
-}
-
-/* === PROMEDIO === */
-.promedio {
-  font-weight: 700;
-  color: var(--rojo);
-}
-
-/* === RESPONSIVO === */
-@media (max-width: 768px) {
-  .tabla-progreso th,
-  .tabla-progreso td {
-    padding: 8px 10px;
-    font-size: 0.9rem;
-  }
-  
-  .curso-progreso h3 {
-    font-size: 1.2rem;
-  }
-}
-
-
-/* TITULOS SECCIONES */
+/* === SECCIONES Y FORMULARIOS === */
 .card h2 {
   color: var(--rojo);
   margin-bottom: 24px;
@@ -172,7 +141,6 @@ body {
   font-size: 1.5rem;
 }
 
-/* FORMULARIOS */
 .form-curso,
 #form-actividad {
   display: flex;
@@ -205,7 +173,7 @@ select:focus {
   outline: none;
 }
 
-/* BOTONES */
+/* === BOTONES === */
 .btn-crear {
   background-color: var(--rojo);
   color: var(--blanco);
@@ -225,56 +193,139 @@ select:focus {
   box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
-/* LISTA DE CURSOS */
-.mis-cursos ul {
-  list-style: none;
-  padding: 0;
+/* === CURSOS Y PROGRESO === */
+.dashboard-progreso {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 20px;
 }
 
-.curso-item {
-  background-color: #fff5f5;
-  border-left: 4px solid var(--rojo);
-  padding: 16px;
-  border-radius: 10px;
-  margin-bottom: 14px;
-  transition: var(--transicion);
+.curso-progreso {
+  background-color: var(--blanco);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px var(--sombra);
+  padding: 24px;
 }
 
-.curso-item:hover {
-  background-color: #ffeaea;
-  transform: scale(1.01);
+.curso-progreso h3 {
+  color: var(--rojo);
+  font-size: 1.4rem;
+  margin-bottom: 16px;
 }
 
-/* RESULTADOS */
-#resultado-nota {
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 8px;
+/* === TABLAS === */
+.tabla-progreso {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-progreso th,
+.tabla-progreso td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--borde);
+}
+
+.tabla-progreso th {
+  background-color: var(--gris-medio);
+  color: var(--texto);
+}
+
+.tabla-progreso td {
+  background-color: var(--gris-claro);
+}
+
+.estado-entregado {
+  color: green;
   font-weight: 600;
 }
 
-#resultado-nota p {
-  margin: 0;
+.estado-pendiente {
+  color: orange;
+  font-weight: 600;
 }
 
-#resultado-nota p[style*="color:green"] {
-  background-color: #e6f4ea;
-  color: #2e7d32;
-  padding: 8px 10px;
+.estado-retrasado {
+  color: var(--rojo);
+  font-weight: 600;
+}
+
+.promedio {
+  font-weight: 700;
+  color: var(--rojo);
+}
+
+/* === SLIDER === */
+.slider {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 800px;
+  margin: 40px auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px var(--sombra);
+}
+
+.slide {
+  width: 100%;
+  height: 300px;
+  display: none;
+  background-color: var(--gris-medio);
+  color: var(--rojo);
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.slide.active {
+  display: flex;
+  opacity: 1;
+}
+
+button.prev,
+button.next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--rojo);
+  color: var(--blanco);
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 8px;
+  transition: background-color var(--transicion);
+}
+
+button.prev:hover,
+button.next:hover {
+  background-color: var(--rojo-oscuro);
+}
+
+button.prev { left: 10px; }
+button.next { right: 10px; }
+
+/* === ALERTAS === */
+.alerta {
+  background-color: var(--rojo-oscuro);
+  color: var(--blanco);
+  padding: 4px 8px;
   border-radius: 6px;
+  font-size: 0.85rem;
+  display: inline-block;
+  margin-top: 4px;
 }
 
-#resultado-nota p[style*="color:red"] {
-  background-color: #fdecea;
-  color: #d32f2f;
-  padding: 8px 10px;
-  border-radius: 6px;
-}
-
-/* RESPONSIVO */
+/* === RESPONSIVO === */
 @media (max-width: 768px) {
   .main-content {
     padding: 20px;
+    margin-left: 80px;
   }
 
   .card {
@@ -294,58 +345,30 @@ select:focus {
   }
 
   .sidebar {
-    width: 70px;
-    gap: 16px;
+    width: 80px;
+    padding: 20px 0;
   }
 
-  .sidebar img {
-    width: 36px;
-    height: 36px;
+  .logo-section h2 {
+    display: none;
   }
 
-  .main-header h1 {
-    font-size: 1.6rem;
+  .menu-item {
+    justify-content: center;
+    padding: 12px;
   }
-}
 
-#progreso-estudiantes {
-  background-color: var(--blanco);
-  padding: 28px;
-  border-radius: 14px;
-  box-shadow: 0 3px 10px var(--sombra);
-  max-width: 1000px;
-  margin-bottom: 40px;
-}
+  .menu-item span {
+    display: none;
+  }
 
-#progreso-estudiantes h2 {
-  color: var(--rojo);
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-}
+  .logout-btn {
+    font-size: 0.9rem;
+    padding: 10px 14px;
+  }
 
-.table-progreso {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table-progreso th, .table-progreso td {
-  border: 1px solid var(--borde);
-  padding: 10px;
-  text-align: center;
-}
-
-.table-progreso th {
-  background-color: var(--rojo);
-  color: var(--blanco);
-}
-
-.alerta {
-  background-color: var(--rojo-oscuro);
-  color: var(--blanco);
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  display: inline-block;
-  margin-top: 4px;
+  .slide {
+    height: 220px;
+    font-size: 1.4rem;
+  }
 }

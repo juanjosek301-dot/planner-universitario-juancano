@@ -69,3 +69,19 @@ def obtener_perfil(id_usuario):
             return jsonify({"error": "Usuario no encontrado"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@usuario_bp.route("/perfil/<int:id_usuario>")
+def perfil_usuario(id_usuario):
+    usuario = ControladorUsuarios.obtener_usuario_por_id(id_usuario)
+    if usuario:
+        return render_template(
+            "perfil_profesor.html",
+            profesor={
+                "id": usuario[0],
+                "nombre": usuario[1],
+                "correo": usuario[2],
+                "rol": usuario[3]
+            }
+        )
+    else:
+        return "Usuario no encontrado", 404

@@ -8,30 +8,26 @@
 </head>
 <body>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="logo">
-      <img src="{{ url_for('static', filename='public/images/Uplannner.png') }}" alt="Logo UPlanner" />
-    </div>
+  <div class="sidebar">
+    <div class="logo-section">
+      <div class="logo-circle">U</div>
+    <h2>UPlanner</h2>
+  </div>
 
-    <nav>
-      <ul>
-        <li>
-          <a href="#" id="btn-perfil" title="Perfil">
-            <img src="{{ url_for('static', filename='public/images/perfil_profesor.png') }}" alt="Perfil" />
-          </a>
-        </li>
-        <li>
-          <a href="#" id="btn-mensajes" title="Mensajes">
-            <img src="{{ url_for('static', filename='public/images/mensajes..png') }}" alt="Mensajes" />
-          </a>
-          <a href="#" id="btn-ver-cursos" title="Mis Cursos"> <img src="{{ url_for('static', filename='public/images/cursos.png') }}" alt="Cursos" /> </a>
-        </li>
-      </ul>
-    </nav>
+  <nav class="menu">
+    <a href="#" class="menu-item">
+      <i class="fas fa-user"></i> Perfil
+    </a>
+    <a href="#" class="menu-item">
+      <i class="fas fa-envelope"></i> Mensajes
+    </a>
+    <a href="#" class="menu-item">
+      <i class="fas fa-book"></i> Cursos
+    </a>
+  </nav>
 
-    <button id="cerrar-sesion">Cerrar sesión</button>
-  </aside>
+  <button class="logout-btn">Cerrar sesión</button>
+</div>
 
   <!-- MAIN CONTENT -->
   <main class="main-content">
@@ -616,4 +612,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Inicializamos cursos al cargar la página
   cargarCursos();
 });
+</script>
+
+<!-- Font Awesome para íconos -->
+<script src="https://kit.fontawesome.com/a2e0e6e6e3.js" crossorigin="anonymous"></script>
+
+<button onclick="verPerfilProfesor()">Ver mi perfil</button>
+
+<script>
+function verPerfilProfesor() {
+  const idProfesor = localStorage.getItem("id_usuario");
+  if (!idProfesor) {
+    alert("No se encontró el ID del usuario logueado.");
+    return;
+  }
+  // 🔹 Redirige a la vista del perfil
+  window.location.href = `/api/perfil/${idProfesor}`;
+}
 </script>
